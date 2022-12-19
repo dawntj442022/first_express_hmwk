@@ -1,19 +1,25 @@
 const express = require("express");
-const fs = require("fs");
+const fs = require("express");
 
 const app = express();
 
+app.get("/", (request, response) => {
+  response.render("template", {
+    title: "homework1",
+    message: "Hello Stranger",
+  });
+});
+
+const fs = require("fs");
 app.engine("hedwig", (filePath, options, callback) => {
   fs.readFile(filePath, (err, content) => {
     if (err) return callback(err);
+
     const rendered = content
       .toString()
       .replace("#title#", `<title>${options.title}</title>`)
-      .replace("#message#", `<h1>${options.message}</h1>`)
-      .replace(
-        "#content#",
-        `<a href="http://localhost:3000/${options.content}">"Hello"</a>`
-      );
+      .replace("#message#", `<h1>${options.message}</h1>`);
+
     return callback(null, rendered);
   });
 });
@@ -21,10 +27,17 @@ app.engine("hedwig", (filePath, options, callback) => {
 app.set("views", "./views");
 app.set("view engine", "hedwig");
 
-app.get("/", (req, res) => {
-  res.send("<h1>Hello Stranger!</h1>");
+app.get("/greeting", (req, res) => {
   res.render("template", {
-    message: "So Great to See You!",
+    title: "homework1",
+    message: "Hello Stranger!",
+  });
+});
+
+app.get("/stranger", (req, res) => {
+  res.render("template", {
+    title: "homework1",
+    message: "So Great to finally see you!",
   });
 });
 
