@@ -13,13 +13,27 @@ app.get("/", (request, response) => {
 app.engine("hedwig", (filePath, options, callback) => {
   fs.readFile(filePath, (err, content) => {
     if (err) return callback(err);
-
     const rendered = content
       .toString()
       .replace("#title#", `<title>${options.title}</title>`)
       .replace("#message#", `<h1>${options.message}</h1>`);
 
     return callback(null, rendered);
+  });
+});
+
+app.engine("hedwig", (filePath, options, callBack) => {
+  fs.readFile(filePath, (err, data) => {
+    if (err) return callBack(err);
+    const rendered = data
+      .toString()
+      .replace("#title#", `<title>${options.title}</title>`)
+      .replace("#message#", `<h1>${options.message}</h1>`)
+      .replace(
+        "#content#",
+        `<a href="http://localhost:3000/${options.content}">"GREETINGS"</a>`
+      );
+    return callBack(null, rendered);
   });
 });
 
@@ -40,10 +54,20 @@ app.get("/greeting/Jacob", (req, res) => {
   });
 });
 
-app.get("/stranger", (req, res) => {
+app.get("/tip", (req, res) => {
   res.render("template", {
     title: "homework1",
-    message: "So Great to finally see you!",
+    message: "15% tip for service",
+    content: "100",
+  });
+});
+
+app.get("/:money", (request, response) => {
+  let total = request.params.money;
+  response.render("template", {
+    title: "homework1",
+    message: `${total} bill for service`,
+    content: `${total * 0.15} gratiuity`,
   });
 });
 
