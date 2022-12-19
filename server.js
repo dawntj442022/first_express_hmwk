@@ -1,5 +1,5 @@
 const express = require("express");
-const fs = require("express");
+const fs = require("fs");
 
 const app = express();
 
@@ -10,7 +10,6 @@ app.get("/", (request, response) => {
   });
 });
 
-const fs = require("fs");
 app.engine("hedwig", (filePath, options, callback) => {
   fs.readFile(filePath, (err, content) => {
     if (err) return callback(err);
@@ -30,7 +29,14 @@ app.set("view engine", "hedwig");
 app.get("/greeting", (req, res) => {
   res.render("template", {
     title: "homework1",
-    message: "Hello Stranger!",
+    message: "Hello!",
+  });
+});
+
+app.get("/greeting/Jacob", (req, res) => {
+  res.render("template", {
+    title: "homework1",
+    message: "Hello Jacob! So Great to See you!",
   });
 });
 
