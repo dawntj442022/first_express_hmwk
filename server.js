@@ -31,7 +31,7 @@ app.engine("hedwig", (filePath, options, callBack) => {
       .replace("#message#", `<h1>${options.message}</h1>`)
       .replace(
         "#content#",
-        `<a href="http://localhost:3000/${options.content}">"GREETINGS"</a>`
+        `<a href="http://localhost:3000/${options.content}">"click me on for gratituity"</a>`
       );
     return callBack(null, rendered);
   });
@@ -57,8 +57,8 @@ app.get("/greeting/Jacob", (req, res) => {
 app.get("/tip", (req, res) => {
   res.render("template", {
     title: "homework1",
-    message: "15% tip for service",
-    content: "100",
+    message: "tip for service",
+    content: "200",
   });
 });
 
@@ -67,7 +67,7 @@ app.get("/:money", (request, response) => {
   response.render("template", {
     title: "homework1",
     message: `${total} bill for service`,
-    content: `${total * 0.15} gratiuity`,
+    content: `${total * 0.25} gratiuity`,
   });
 });
 
