@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const fs = require("fs");
 
 const app = express();
 
@@ -7,18 +8,6 @@ app.get("/", (request, response) => {
   response.render("template", {
     title: "homework1",
     message: "Hello Stranger",
-  });
-});
-
-app.engine("hedwig", (filePath, options, callback) => {
-  fs.readFile(filePath, (err, content) => {
-    if (err) return callback(err);
-    const rendered = content
-      .toString()
-      .replace("#title#", `<title>${options.title}</title>`)
-      .replace("#message#", `<h1>${options.message}</h1>`);
-
-    return callback(null, rendered);
   });
 });
 
@@ -31,14 +20,29 @@ app.engine("hedwig", (filePath, options, callBack) => {
       .replace("#message#", `<h1>${options.message}</h1>`)
       .replace(
         "#content#",
-        `<a href="http://localhost:3000/${options.content}">"click me on for gratituity"</a>`
+        `<a href="http://localhost:3000/${options.content}">"click me on for gratituity only"</a>`
       );
     return callBack(null, rendered);
   });
 });
 
+app.engine("hedwig2", (filePath, options, callBack) => {
+  fs.readFile(filePath, (err, content) => {
+    if (err) return callBack(err);
+    const posted = content
+      .toString()
+      .replace("#title#", `<title>${options.title}</title>`)
+      .replace("#message#", `<h1>${options.message}</h1>`)
+      .replace(
+        "#content#",
+        `<a href="http://localhost:3000/${options.content}">"Will I win the lottery"</a>`
+      );
+    return callBack(null, posted);
+  });
+});
+
 app.set("views", "./views");
-app.set("view engine", "hedwig");
+app.set("view engine", "hedwig2");
 
 app.get("/greeting", (req, res) => {
   res.render("template", {
@@ -68,6 +72,39 @@ app.get("/:money", (request, response) => {
     title: "homework1",
     message: `${total} bill for service`,
     content: `${total * 0.25} gratiuity`,
+  });
+});
+
+//8 Magic Ball
+
+const BallResponse = [
+  "It is certain",
+  "It is decidedly so",
+  "Without a doubt",
+  "Yes definitely",
+  "You may rely on it",
+  "As I see it yes",
+  "Most likely",
+  "Outlook good",
+  "Yes",
+  "Signs point to yes",
+  "Reply hazy try again",
+  "Ask again later",
+  "Better not tell you now",
+  "Cannot predict now",
+  "Concentrate and ask again",
+  "Don't count on it",
+  "My reply is no",
+  "My sources say no",
+  "Outlook not so good",
+  "Very doubtful",
+];
+
+app.get("/magic", (req, res) => {
+  res.post("template", {
+    title: "homework1",
+    message: "8 Ball",
+    content: "Will I win the ",
   });
 });
 
