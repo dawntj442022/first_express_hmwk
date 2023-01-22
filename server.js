@@ -1,112 +1,55 @@
 const express = require("express");
 const fs = require("fs");
-const fs = require("fs");
+const { request } = require("http");
 
+//create express app
 const app = express();
 
-app.get("/", (request, response) => {
-  response.render("template", {
-    title: "homework1",
-    message: "Hello Stranger",
-  });
-});
-
+//create template engine
 app.engine("hedwig", (filePath, options, callBack) => {
   fs.readFile(filePath, (err, data) => {
     if (err) return callBack(err);
     const rendered = data
       .toString()
       .replace("#title#", `<title>${options.title}</title>`)
-      .replace("#message#", `<h1>${options.message}</h1>`)
-      .replace(
-        "#content#",
-        `<a href="http://localhost:3000/${options.content}">"click me on for gratituity only"</a>`
-      );
+      .replace("#message#", `<h1>${options.message}</h1>`);
     return callBack(null, rendered);
   });
 });
 
-app.engine("hedwig2", (filePath, options, callBack) => {
-  fs.readFile(filePath, (err, content) => {
-    if (err) return callBack(err);
-    const posted = content
-      .toString()
-      .replace("#title#", `<title>${options.title}</title>`)
-      .replace("#message#", `<h1>${options.message}</h1>`)
-      .replace(
-        "#content#",
-        `<a href="http://localhost:3000/${options.content}">"Will I win the lottery"</a>`
-      );
-    return callBack(null, posted);
-  });
-});
-
 app.set("views", "./views");
-app.set("view engine", "hedwig2");
+app.set("view engine", "hedwig");
 
-app.get("/greeting", (req, res) => {
-  res.render("template", {
+app.get("/greeting", (request, response) => {
+  response.render("template", {
     title: "homework1",
-    message: "Hello!",
+    message: "Hello Stranger",
   });
 });
 
-app.get("/greeting/Jacob", (req, res) => {
+app.get("/greeting/:Jacob", (req, res) => {
   res.render("template", {
     title: "homework1",
     message: "Hello Jacob! So Great to See you!",
   });
 });
 
-app.get("/tip", (req, res) => {
-  res.render("template", {
-    title: "homework1",
-    message: "tip for service",
-    content: "200",
-  });
-});
+// app.get("/tip", (req, res) => {
+//   res.render("template", {
+//     title: "homework1",
+//     message: "tip for service",
+//     content: "200",
+//   });
+// });
 
-app.get("/:money", (request, response) => {
-  let total = request.params.money;
-  response.render("template", {
-    title: "homework1",
-    message: `${total} bill for service`,
-    content: `${total * 0.25} gratiuity`,
-  });
-});
-
-//8 Magic Ball
-
-const BallResponse = [
-  "It is certain",
-  "It is decidedly so",
-  "Without a doubt",
-  "Yes definitely",
-  "You may rely on it",
-  "As I see it yes",
-  "Most likely",
-  "Outlook good",
-  "Yes",
-  "Signs point to yes",
-  "Reply hazy try again",
-  "Ask again later",
-  "Better not tell you now",
-  "Cannot predict now",
-  "Concentrate and ask again",
-  "Don't count on it",
-  "My reply is no",
-  "My sources say no",
-  "Outlook not so good",
-  "Very doubtful",
-];
-
-app.get("/magic", (req, res) => {
-  res.post("template", {
-    title: "homework1",
-    message: "8 Ball",
-    content: "Will I win the ",
-  });
-});
+// app.get("/:money", (request, response) => {
+//   let total = request.params.money;
+//   response.render("template", {
+//     title: "homework1",
+//     message: `${total} bill for service`,
+//     content: `${total * 0.25} gratiuity`,
+//   });
+// });
 
 app.listen(3000, function () {
   console.log("Listening on port 3000");
